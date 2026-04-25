@@ -34,7 +34,7 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 					...state.layout,
 					{
 						i: widget.id,
-						x: 0, // FIXME: Get dashboard free position
+						x: 0, // TODO: Get dashboard free position
 						y: 0,
 						w: definition.defaultSize.w,
 						h: definition.defaultSize.h,
