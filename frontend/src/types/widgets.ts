@@ -18,3 +18,9 @@ export interface WidgetDefinition {
 	component: React.FC<WidgetProps>;
 	defaultConfig: Record<string, unknown>;
 }
+
+export interface WidgetInstance {
+	id: string;
+	type: string;
+	config: Record<string, unknown>;
+}
