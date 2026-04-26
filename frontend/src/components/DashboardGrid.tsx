@@ -2,6 +2,9 @@ import GridLayout, { type Layout } from 'react-grid-layout';
 import { useDashboardStore } from '../store/dashboardStore';
 import WidgetRenderer from './WidgetRenderer';
 
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
 export default function DashboardGrid() {
 	const widgets = useDashboardStore((s) => s.widgets);
 
@@ -23,8 +26,6 @@ export default function DashboardGrid() {
 			onLayoutChange={handleLayoutChange}>
 			{widgets.map((widget) => (
 				<div key={widget.id} className='widget-shell'>
-					<div className='widget-header'>{widget.type}</div>
-
 					<WidgetRenderer
 						widget={widget}
 						onConfigChange={updateWidgetConfig}
