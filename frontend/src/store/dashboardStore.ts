@@ -16,6 +16,7 @@ interface DashboardState {
 
 	addWidget: (widget: WidgetInstance) => void;
 	removeWidget: (id: string) => void;
+	updateWidgetConfig: (id: string, config: Record<string, unknown>) => void;
 	updateLayout: (layout: LayoutItem[]) => void;
 }
 
@@ -50,5 +51,16 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 			layout: state.layout.filter((item) => item.i !== id),
 		})),
 
+	updateWidgetConfig: (id, config) =>
+		set((state) => ({
+			widgets: state.widgets.map((widget) =>
+				widget.id === id
+					? {
+							...widget,
+							config,
+						}
+					: widget,
+			),
+		})),
 	updateLayout: (layout) => set({ layout }),
 }));
