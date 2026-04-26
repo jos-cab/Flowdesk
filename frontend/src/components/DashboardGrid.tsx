@@ -52,7 +52,7 @@ export default function DashboardGrid() {
 					layout={layout}
 					gridConfig={{
 						cols: 12,
-						rowHeight: 30,
+						rowHeight: 100,
 					}}
 					compactor={noCompactor}
 					onLayoutChange={handleLayoutChange}
