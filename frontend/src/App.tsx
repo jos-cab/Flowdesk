@@ -1,12 +1,8 @@
+import DashboardGrid from './components/DashboardGrid';
 import { useDashboardStore } from './store/dashboardStore';
-import WidgetRenderer from './components/WidgetRenderer';
 
 function App() {
-	const widgets = useDashboardStore((s) => s.widgets);
-
 	const addWidget = useDashboardStore((s) => s.addWidget);
-
-	const updateWidgetConfig = useDashboardStore((s) => s.updateWidgetConfig);
 
 	return (
 		<>
@@ -23,13 +19,7 @@ function App() {
 				Add Notes Widget
 			</button>
 
-			{widgets.map((widget) => (
-				<WidgetRenderer
-					key={widget.id}
-					widget={widget}
-					onConfigChange={updateWidgetConfig}
-				/>
-			))}
+			<DashboardGrid />
 		</>
 	);
 }
