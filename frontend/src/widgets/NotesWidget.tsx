@@ -16,7 +16,7 @@ export default function NotesWidget({ config, onConfigChange }: WidgetProps) {
 	};
 
 	return (
-		<div style={{ padding: 8, height: '100%' }}>
+		<div style={{ height: '100%' }}>
 			<textarea
 				value={notesConfig?.text ?? ''}
 				onChange={(e) => handleChange(e.target.value)}

@@ -15,12 +15,10 @@ export default function WidgetRenderer({
 	const Component = definition.component;
 
 	return (
-		<div>
-			<Component
-				id={widget.id}
-				config={widget.config}
-				onConfigChange={(config) => onConfigChange(widget.id, config)}
-			/>
-		</div>
+		<Component
+			id={widget.id}
+			config={widget.config}
+			onConfigChange={(config) => onConfigChange(widget.id, config)}
+		/>
 	);
 }
