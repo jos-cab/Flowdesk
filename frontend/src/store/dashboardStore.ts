@@ -2,6 +2,17 @@ import { create } from 'zustand';
 import type { WidgetInstance } from '../types/widgets';
 import { getWidget } from '../registry/widgetRegistry';
 
+const ALL_RESIZE_HANDLES = [
+	's',
+	'w',
+	'e',
+	'n',
+	'sw',
+	'nw',
+	'se',
+	'ne',
+] as const;
+
 type LayoutItem = {
 	i: string;
 	x: number;
@@ -35,10 +46,11 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 					...state.layout,
 					{
 						i: widget.id,
-						x: 0, // TODO: Get dashboard free position
+						x: 0,
 						y: 0,
 						w: definition.defaultSize.w,
 						h: definition.defaultSize.h,
+						resizeHandles: ALL_RESIZE_HANDLES,
 					},
 				],
 			};

@@ -1,4 +1,4 @@
-import GridLayout, { type Layout } from 'react-grid-layout';
+import GridLayout, { noCompactor, type Layout } from 'react-grid-layout';
 import { useDashboardStore } from '../store/dashboardStore';
 import WidgetRenderer from './WidgetRenderer';
 
@@ -24,6 +24,7 @@ export default function DashboardGrid() {
 			layout={layout as Layout}
 			width={1200}
 			gridConfig={{ cols: 12, rowHeight: 30 }}
+			compactor={noCompactor}
 			onLayoutChange={handleLayoutChange}>
 			{widgets.map((widget) => (
 				<div key={widget.id} className='widget-shell'>
