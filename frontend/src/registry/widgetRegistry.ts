@@ -1,4 +1,5 @@
 import type { WidgetDefinition } from '../types/widgets';
+import NotesWidget from '../widgets/NotesWidget';
 
 const registry: Record<string, WidgetDefinition> = {};
 
@@ -23,3 +24,16 @@ export function getWidget(type: string): WidgetDefinition {
 export function getAllWidgets() {
 	return Object.values(registry);
 }
+
+registerWidget({
+	type: 'notes',
+	name: 'Notes',
+	defaultSize: {
+		w: 4,
+		h: 4,
+	},
+	component: NotesWidget,
+	defaultConfig: {
+		text: '',
+	},
+});
