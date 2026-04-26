@@ -23,6 +23,7 @@ export default function DashboardGrid() {
 			className='layout'
 			layout={layout as Layout}
 			width={1200}
+			gridConfig={{ cols: 12, rowHeight: 30 }}
 			onLayoutChange={handleLayoutChange}>
 			{widgets.map((widget) => (
 				<div key={widget.id} className='widget-shell'>
