@@ -2,38 +2,39 @@ import { create } from 'zustand';
 import type { WidgetInstance } from '../types/widgets';
 import { getWidget } from '../registry/widgetRegistry';
 
-const ALL_RESIZE_HANDLES = [
-	's',
-	'w',
-	'e',
-	'n',
-	'sw',
-	'nw',
-	'se',
-	'ne',
-] as const;
+type ResizeHandle = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
-type LayoutItem = {
+export type LayoutItem = {
 	i: string;
 	x: number;
 	y: number;
 	w: number;
 	h: number;
+	resizeHandles?: ResizeHandle[];
 };
 
 interface DashboardState {
 	widgets: WidgetInstance[];
 	layout: LayoutItem[];
 
+	editMode: boolean;
+
 	addWidget: (widget: WidgetInstance) => void;
+
 	removeWidget: (id: string) => void;
+
 	updateWidgetConfig: (id: string, config: Record<string, unknown>) => void;
+
 	updateLayout: (layout: LayoutItem[]) => void;
+
+	toggleEditMode: () => void;
 }
 
 export const useDashboardStore = create<DashboardState>()((set) => ({
 	widgets: [],
 	layout: [],
+
+	editMode: false,
 
 	addWidget: (widget) =>
 		set((state) => {
@@ -50,7 +51,6 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 						y: 0,
 						w: definition.defaultSize.w,
 						h: definition.defaultSize.h,
-						resizeHandles: ALL_RESIZE_HANDLES,
 					},
 				],
 			};
@@ -74,5 +74,14 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 					: widget,
 			),
 		})),
-	updateLayout: (layout) => set({ layout }),
+
+	updateLayout: (layout) =>
+		set({
+			layout,
+		}),
+
+	toggleEditMode: () =>
+		set((state) => ({
+			editMode: !state.editMode,
+		})),
 }));
