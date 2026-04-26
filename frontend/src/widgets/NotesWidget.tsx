@@ -1,4 +1,4 @@
-import type { WidgetProps } from '../types/widgets';
+import type { WidgetProps } from '../types/widget';
 
 type NotesConfig = {
 	text: string;

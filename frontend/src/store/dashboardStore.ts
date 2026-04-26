@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { WidgetInstance } from '../types/widgets';
+import type { WidgetInstance } from '../types/widget';
 import { getWidget } from '../registry/widgetRegistry';
 
 type ResizeHandle = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';

@@ -1,5 +1,5 @@
 import { getWidget } from '../registry/widgetRegistry';
-import type { WidgetInstance } from '../types/widgets';
+import type { WidgetInstance } from '../types/widget';
 
 type WidgetRendererProps = {
 	widget: WidgetInstance;

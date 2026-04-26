@@ -1,4 +1,4 @@
-import type { WidgetDefinition } from '../types/widgets';
+import type { WidgetDefinition } from '../types/widget';
 import NotesWidget from '../widgets/NotesWidget';
 
 const registry: Record<string, WidgetDefinition> = {};
