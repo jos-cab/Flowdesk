@@ -1,21 +1,54 @@
 import { create } from 'zustand';
+import type { Layout } from 'react-grid-layout';
 import type { WidgetInstance } from '../types/widget';
 import { getWidget } from '../registry/widgetRegistry';
 
-type ResizeHandle = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+// XXX: does not sync with gridConfig.maxRows in DashboardGrid
+const GRID_COLS = 12;
+const GRID_MAX_ROWS = 5;
 
-export type LayoutItem = {
-	i: string;
-	x: number;
-	y: number;
-	w: number;
-	h: number;
-	resizeHandles?: ResizeHandle[];
-};
+// HACK: findFreePosition instead of hardcoding initial position of widgets
+function findFreePosition(
+	layout: Layout,
+	w: number,
+	h: number,
+	maxRows: number,
+): { x: number; y: number } {
+	const occupied = new Set<string>();
+
+	for (const item of layout) {
+		for (let x = item.x; x < item.x + item.w; x++) {
+			for (let y = item.y; y < item.y + item.h; y++) {
+				occupied.add(`${x},${y}`);
+			}
+		}
+	}
+
+	for (let y = 0; y <= maxRows - h; y++) {
+		for (let x = 0; x <= GRID_COLS - w; x++) {
+			let free = true;
+
+			for (let dx = 0; dx < w && free; dx++) {
+				for (let dy = 0; dy < h; dy++) {
+					if (occupied.has(`${x + dx},${y + dy}`)) {
+						free = false;
+						break;
+					}
+				}
+			}
+
+			if (free) {
+				return { x, y };
+			}
+		}
+	}
+
+	return { x: 0, y: 0 };
+}
 
 interface DashboardState {
 	widgets: WidgetInstance[];
-	layout: LayoutItem[];
+	layout: Layout;
 
 	editMode: boolean;
 
@@ -23,9 +56,9 @@ interface DashboardState {
 
 	removeWidget: (id: string) => void;
 
-	updateWidgetConfig: (id: string, config: Record<string, unknown>) => void;
+	updateLayout: (nextLayout: Layout) => void;
 
-	updateLayout: (layout: LayoutItem[]) => void;
+	updateWidgetConfig: (id: string, config: Record<string, unknown>) => void;
 
 	toggleEditMode: () => void;
 }
@@ -39,6 +72,12 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 	addWidget: (widget) =>
 		set((state) => {
 			const definition = getWidget(widget.type);
+			const position = findFreePosition(
+				state.layout,
+				definition.defaultSize.w,
+				definition.defaultSize.h,
+				GRID_MAX_ROWS,
+			);
 
 			return {
 				widgets: [...state.widgets, widget],
@@ -47,8 +86,8 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 					...state.layout,
 					{
 						i: widget.id,
-						x: 0,
-						y: 0,
+						x: position.x,
+						y: position.y,
 						w: definition.defaultSize.w,
 						h: definition.defaultSize.h,
 					},
@@ -59,8 +98,12 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 	removeWidget: (id) =>
 		set((state) => ({
 			widgets: state.widgets.filter((widget) => widget.id !== id),
-
 			layout: state.layout.filter((item) => item.i !== id),
+		})),
+
+	updateLayout: (nextLayout) =>
+		set(() => ({
+			layout: [...nextLayout],
 		})),
 
 	updateWidgetConfig: (id, config) =>
@@ -74,11 +117,6 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
 					: widget,
 			),
 		})),
-
-	updateLayout: (layout) =>
-		set({
-			layout,
-		}),
 
 	toggleEditMode: () =>
 		set((state) => ({

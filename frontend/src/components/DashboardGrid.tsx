@@ -4,6 +4,7 @@ import {
 	useContainerWidth,
 	type Layout,
 } from 'react-grid-layout';
+import { gridBounds } from 'react-grid-layout/core';
 
 import { useDashboardStore } from '../store/dashboardStore';
 import WidgetRenderer from './WidgetRenderer';
@@ -43,17 +44,20 @@ export default function DashboardGrid() {
 			ref={containerRef}
 			style={{
 				width: '100%',
-				height: '100vh',
 			}}>
 			{mounted && (
 				<GridLayout
 					className='layout'
 					width={width}
 					layout={layout}
+					style={{ height: '100%' }}
+					autoSize={false}
 					gridConfig={{
 						cols: 12,
 						rowHeight: 100,
+						maxRows: 5,
 					}}
+					constraints={[gridBounds]}
 					compactor={noCompactor}
 					onLayoutChange={handleLayoutChange}
 					dragConfig={{
